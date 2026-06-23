@@ -1,0 +1,630 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   ROOT & BASE STYLES
+   ============================================================ */
+:root {
+  --space-black: #04040f;
+  --space-navy: #0a0a1e;
+  --nebula-purple: #6b21a8;
+  --nebula-violet: #7c3aed;
+  --aurora-pink: #ec4899;
+  --aurora-rose: #f43f5e;
+  --aurora-cyan: #06b6d4;
+  --aurora-green: #10b981;
+  --star-white: #f8fafc;
+  --glow-blue: #60a5fa;
+  --gold: #fbbf24;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  background-color: var(--space-black);
+  color: var(--star-white);
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ============================================================
+   CUSTOM SCROLLBAR — gradient glow
+   ============================================================ */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--space-black); }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #7c3aed, #ec4899, #f43f5e);
+  border-radius: 3px;
+  box-shadow: 0 0 6px #ec4899;
+}
+
+/* ============================================================
+   CUSTOM CURSOR — larger, more glowing
+   ============================================================ */
+.cursor-dot {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  background: radial-gradient(circle, #fff 0%, #ec4899 60%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: transform 0.08s ease, width 0.2s ease, height 0.2s ease;
+  box-shadow: 0 0 12px #ec4899, 0 0 24px #ec4899, 0 0 40px rgba(236,72,153,0.4);
+}
+
+.cursor-ring {
+  position: fixed;
+  width: 36px;
+  height: 36px;
+  border: 1.5px solid rgba(236, 72, 153, 0.5);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+  transition: all 0.18s ease;
+  box-shadow: inset 0 0 8px rgba(236,72,153,0.1);
+}
+
+/* ============================================================
+   GLASSMORPHISM — richer with coloured tints
+   ============================================================ */
+.glass-card {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.06);
+}
+
+.glass-card-strong {
+  background: linear-gradient(135deg, rgba(107,33,168,0.06) 0%, rgba(236,72,153,0.04) 100%);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border: 1px solid rgba(236, 72, 153, 0.18);
+  border-radius: 24px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(236,72,153,0.05), inset 0 1px 0 rgba(255,255,255,0.08);
+}
+
+/* Animated neon border card */
+.glass-card-neon {
+  background: rgba(10,10,30,0.6);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border-radius: 24px;
+  position: relative;
+  overflow: hidden;
+}
+.glass-card-neon::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 26px;
+  background: conic-gradient(from var(--angle, 0deg), #6b21a8, #ec4899, #f43f5e, #ec4899, #6b21a8);
+  z-index: -1;
+  animation: spinBorder 4s linear infinite;
+}
+.glass-card-neon::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border-radius: 22px;
+  background: rgba(8,8,22,0.92);
+  z-index: -1;
+}
+@property --angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+@keyframes spinBorder {
+  to { --angle: 360deg; }
+}
+
+/* ============================================================
+   AURORA LIGHT CURTAIN — atmospheric background layer
+   ============================================================ */
+.aurora-curtain {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 60%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+.aurora-curtain::before,
+.aurora-curtain::after {
+  content: '';
+  position: absolute;
+  top: -30%;
+  width: 120%;
+  height: 140%;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0;
+  animation: auroraSway 8s ease-in-out infinite;
+}
+.aurora-curtain::before {
+  left: -20%;
+  background: radial-gradient(ellipse, rgba(107,33,168,0.35) 0%, transparent 70%);
+  animation-delay: 0s;
+}
+.aurora-curtain::after {
+  right: -20%;
+  background: radial-gradient(ellipse, rgba(236,72,153,0.25) 0%, transparent 70%);
+  animation-delay: 4s;
+}
+@keyframes auroraSway {
+  0%, 100% { opacity: 0; transform: translateY(0) scaleX(1); }
+  30% { opacity: 1; }
+  50% { opacity: 0.8; transform: translateY(-5%) scaleX(1.05); }
+  70% { opacity: 1; }
+}
+
+/* ============================================================
+   STAR FIELD
+   ============================================================ */
+.stars-container {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.star {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  animation: twinkle var(--duration, 3s) ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.15; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.4); box-shadow: 0 0 4px white; }
+}
+
+/* ============================================================
+   SHOOTING STAR — with pink glow trail
+   ============================================================ */
+.shooting-star {
+  position: absolute;
+  height: 2px;
+  background: linear-gradient(to right, transparent, white, rgba(236,72,153,0.5), transparent);
+  border-radius: 50%;
+  animation: shoot var(--shoot-duration, 4s) linear infinite;
+  animation-delay: var(--shoot-delay, 0s);
+  opacity: 0;
+  box-shadow: 0 0 6px rgba(236,72,153,0.6);
+}
+
+@keyframes shoot {
+  0% { transform: translateX(0) translateY(0) rotate(-45deg); opacity: 0; }
+  8% { opacity: 1; }
+  88% { opacity: 0.8; }
+  100% { transform: translateX(600px) translateY(600px) rotate(-45deg); opacity: 0; }
+}
+
+/* ============================================================
+   SCROLL PROGRESS — thicker glow bar
+   ============================================================ */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(to right, #7c3aed, #ec4899, #f43f5e, #fbbf24);
+  background-size: 200% 100%;
+  z-index: 1000;
+  transition: width 0.1s linear;
+  box-shadow: 0 0 12px #ec4899, 0 0 4px #f43f5e;
+  animation: scrollGradientShift 3s linear infinite;
+}
+@keyframes scrollGradientShift {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+/* ============================================================
+   GLOW EFFECTS
+   ============================================================ */
+.text-glow-pink {
+  text-shadow: 0 0 20px rgba(236,72,153,0.9), 0 0 40px rgba(236,72,153,0.5), 0 0 80px rgba(236,72,153,0.2);
+}
+.text-glow-purple {
+  text-shadow: 0 0 20px rgba(124,58,237,0.9), 0 0 40px rgba(107,33,168,0.5);
+}
+.text-glow-white {
+  text-shadow: 0 0 12px rgba(248,250,252,0.7), 0 0 24px rgba(248,250,252,0.4), 0 0 48px rgba(248,250,252,0.15);
+}
+.text-glow-gold {
+  text-shadow: 0 0 20px rgba(251,191,36,0.8), 0 0 40px rgba(251,191,36,0.4);
+}
+
+/* Pulsing aurora glow border */
+.aurora-glow {
+  position: relative;
+}
+.aurora-glow::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  background: linear-gradient(135deg, #6b21a8, #ec4899, #f43f5e, #a855f7, #6b21a8);
+  background-size: 300% 300%;
+  border-radius: inherit;
+  z-index: -1;
+  opacity: 0;
+  filter: blur(14px);
+  animation: auroraGlow 3s ease-in-out infinite, auroraShift 6s linear infinite;
+}
+@keyframes auroraGlow {
+  0%, 100% { opacity: 0.35; filter: blur(14px); }
+  50% { opacity: 0.9; filter: blur(20px); }
+}
+@keyframes auroraShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ============================================================
+   FLOATING ORB — reusable animated background orb
+   ============================================================ */
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  pointer-events: none;
+  animation: orbFloat 10s ease-in-out infinite;
+}
+.orb-pink  { background: radial-gradient(circle, rgba(236,72,153,0.4), transparent 70%); }
+.orb-purple{ background: radial-gradient(circle, rgba(107,33,168,0.4), transparent 70%); }
+.orb-blue  { background: radial-gradient(circle, rgba(59,130,246,0.3), transparent 70%); }
+.orb-rose  { background: radial-gradient(circle, rgba(244,63,94,0.3), transparent 70%); }
+@keyframes orbFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(30px, -20px) scale(1.05); }
+  50% { transform: translate(-20px, 30px) scale(0.95); }
+  75% { transform: translate(15px, 10px) scale(1.02); }
+}
+
+/* ============================================================
+   SECTION BASE
+   ============================================================ */
+section { position: relative; overflow: hidden; }
+
+/* ============================================================
+   TYPOGRAPHY UTILITIES
+   ============================================================ */
+.font-cinzel { font-family: 'Cinzel', serif; }
+.font-lora   { font-family: 'Lora', serif; }
+.font-inter  { font-family: 'Inter', sans-serif; }
+
+/* ============================================================
+   LETTER ANIMATION
+   ============================================================ */
+.letter-line {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.letter-line.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============================================================
+   MAP STYLES
+   ============================================================ */
+.leaflet-container { background: #0a0a1e !important; border-radius: 16px; }
+.leaflet-tile { filter: brightness(0.65) saturate(0.4) hue-rotate(210deg); }
+
+/* ============================================================
+   CONSTELLATION SVG
+   ============================================================ */
+.star-node {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  filter: drop-shadow(0 0 8px #ec4899) drop-shadow(0 0 4px #f43f5e);
+}
+.star-node:hover {
+  filter: drop-shadow(0 0 18px #ec4899) drop-shadow(0 0 30px #f43f5e) drop-shadow(0 0 50px rgba(236,72,153,0.4));
+}
+.constellation-line {
+  stroke: rgba(236,72,153,0.35);
+  stroke-width: 0.5;
+  fill: none;
+  animation: linePulse 3s ease-in-out infinite;
+}
+@keyframes linePulse {
+  0%, 100% { stroke-opacity: 0.2; stroke-width: 0.3; }
+  50% { stroke-opacity: 0.9; stroke-width: 0.6; }
+}
+
+/* ============================================================
+   MODAL
+   ============================================================ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(4,4,15,0.88);
+  backdrop-filter: blur(12px);
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+/* ============================================================
+   SECTION DIVIDERS — wave
+   ============================================================ */
+.wave-divider {
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+  pointer-events: none;
+}
+.wave-divider svg { display: block; }
+
+/* ============================================================
+   STAT COUNTER CARD
+   ============================================================ */
+.stat-card {
+  background: linear-gradient(135deg, rgba(107,33,168,0.1), rgba(236,72,153,0.06));
+  backdrop-filter: blur(24px);
+  border: 1px solid rgba(236,72,153,0.2);
+  border-radius: 20px;
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(236,72,153,0.6), transparent);
+}
+.stat-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(236,72,153,0.5);
+  box-shadow: 0 20px 60px rgba(236,72,153,0.15), 0 0 30px rgba(107,33,168,0.1);
+}
+
+/* ============================================================
+   FIREFLIES
+   ============================================================ */
+.firefly {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--aurora-pink);
+  box-shadow: 0 0 8px var(--aurora-pink), 0 0 16px var(--aurora-pink);
+  animation: fireflyFloat 7s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes fireflyFloat {
+  0%, 100% { transform: translate(0,0); opacity: 0.2; }
+  20% { transform: translate(20px,-40px); opacity: 1; }
+  40% { transform: translate(-15px,-70px); opacity: 0.7; }
+  60% { transform: translate(30px,-50px); opacity: 1; }
+  80% { transform: translate(-10px,-30px); opacity: 0.5; }
+}
+
+/* ============================================================
+   RESPONSIVE HELPERS
+   ============================================================ */
+@media (max-width: 768px) {
+  .glass-card       { border-radius: 16px; }
+  .glass-card-strong{ border-radius: 20px; }
+  .glass-card-neon  { border-radius: 20px; }
+}
+
+/* ============================================================
+   NUMBER COUNTER
+   ============================================================ */
+.counter-number { font-variant-numeric: tabular-nums; letter-spacing: -0.03em; }
+
+/* ============================================================
+   MUSIC BUTTON
+   ============================================================ */
+.music-btn {
+  background: rgba(107,33,168,0.15);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(236,72,153,0.3);
+  transition: all 0.3s ease;
+}
+.music-btn:hover {
+  background: rgba(236,72,153,0.18);
+  border-color: rgba(236,72,153,0.7);
+  box-shadow: 0 0 24px rgba(236,72,153,0.35), 0 0 8px rgba(107,33,168,0.2);
+  transform: scale(1.05);
+}
+
+/* ============================================================
+   BUTTON STYLES — shimmer effect
+   ============================================================ */
+.btn-primary {
+  background: linear-gradient(135deg, #6b21a8 0%, #a855f7 40%, #ec4899 70%, #f43f5e 100%);
+  background-size: 200% 200%;
+  border: none;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s ease;
+  animation: btnShimmer 4s ease infinite;
+}
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  top: -50%; left: -60%;
+  width: 40%; height: 200%;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.25), transparent);
+  transform: skewX(-20deg);
+  animation: shimmerSlide 3s ease-in-out infinite;
+}
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #7c3aed, #f43f5e);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.btn-primary:hover::after { opacity: 1; }
+.btn-primary:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 15px 50px rgba(236,72,153,0.45), 0 0 30px rgba(107,33,168,0.3), 0 0 60px rgba(244,63,94,0.15);
+}
+.btn-primary:active { transform: translateY(-1px) scale(0.99); }
+@keyframes btnShimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+@keyframes shimmerSlide {
+  0% { left: -60%; opacity: 0; }
+  30% { opacity: 1; }
+  100% { left: 130%; opacity: 0; }
+}
+
+/* ============================================================
+   GLOWING SEPARATOR LINE
+   ============================================================ */
+.glow-line {
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(236,72,153,0.8), rgba(107,33,168,0.8), rgba(236,72,153,0.8), transparent);
+  box-shadow: 0 0 8px rgba(236,72,153,0.4);
+  animation: linePulse2 4s ease-in-out infinite;
+}
+@keyframes linePulse2 {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; box-shadow: 0 0 16px rgba(236,72,153,0.7); }
+}
+
+/* ============================================================
+   CHAPTER BADGE
+   ============================================================ */
+.chapter-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 14px;
+  border-radius: 999px;
+  background: rgba(107,33,168,0.2);
+  border: 1px solid rgba(236,72,153,0.3);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #f9a8d4;
+  animation: badgePulse 3s ease-in-out infinite;
+}
+@keyframes badgePulse {
+  0%, 100% { box-shadow: 0 0 0 rgba(236,72,153,0); }
+  50% { box-shadow: 0 0 12px rgba(236,72,153,0.3); }
+}
+
+/* ============================================================
+   SPARKLE ICON ANIMATION
+   ============================================================ */
+.sparkle-spin {
+  display: inline-block;
+  animation: sparkleSpin 3s linear infinite;
+}
+@keyframes sparkleSpin {
+  0%   { transform: rotate(0deg) scale(1); }
+  25%  { transform: rotate(90deg) scale(1.2); }
+  50%  { transform: rotate(180deg) scale(1); }
+  75%  { transform: rotate(270deg) scale(1.2); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+/* ============================================================
+   PHOTO FRAME HOVER
+   ============================================================ */
+.photo-frame {
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.photo-frame:hover {
+  transform: scale(1.02) rotate(0.5deg);
+}
+
+/* ============================================================
+   TYPING CURSOR BLINK
+   ============================================================ */
+.typing-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1.1em;
+  background: #ec4899;
+  margin-left: 2px;
+  border-radius: 1px;
+  animation: cursorBlink 1s step-end infinite;
+  box-shadow: 0 0 8px #ec4899;
+  vertical-align: middle;
+}
+@keyframes cursorBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* ============================================================
+   HEARTBEAT ANIMATION
+   ============================================================ */
+.heartbeat {
+  animation: heartbeat 1.5s ease-in-out infinite;
+}
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  14% { transform: scale(1.25); }
+  28% { transform: scale(1); }
+  42% { transform: scale(1.15); }
+  70% { transform: scale(1); }
+}
+
+/* ============================================================
+   GRADIENT TEXT ANIMATION
+   ============================================================ */
+.gradient-text-animated {
+  background: linear-gradient(135deg, #f8fafc, #e2e8f0, #ec4899, #a855f7, #f43f5e, #fbbf24, #f8fafc);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradientShift 6s ease infinite;
+}
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ============================================================
+   NEBULA BLOB — large blurred background decoration
+   ============================================================ */
+.nebula-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
