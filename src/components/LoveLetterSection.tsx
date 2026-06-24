@@ -6,14 +6,11 @@ import { Volume2, VolumeX, MailOpen, Mail } from "lucide-react";
 import { LOVE_LETTER } from "@/config/memories";
 import StarField from "./StarField";
 
-export default function LoveLetterSection() {
+function LetterLines({ paragraphs }: { paragraphs: string[] }) {
   const [visibleLines, setVisibleLines] = useState<Set<number>>(new Set());
   const lineRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const [speaking, setSpeaking] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    if (!isOpen) return;
     const observers: IntersectionObserver[] = [];
     lineRefs.current.forEach((el, i) => {
       if (!el) return;
@@ -31,7 +28,41 @@ export default function LoveLetterSection() {
       observers.push(obs);
     });
     return () => observers.forEach((o) => o.disconnect());
-  }, [isOpen]);
+  }, [paragraphs]);
+
+  return (
+    <div className="space-y-6">
+      {paragraphs.map((para, i) => (
+        <div
+          key={i}
+          ref={(el) => { lineRefs.current[i] = el; }}
+          className="letter-line"
+          style={{
+            opacity: visibleLines.has(i) ? 1 : 0,
+            transform: visibleLines.has(i) ? "translateY(0)" : "translateY(12px)",
+            transition: "opacity 0.8s ease, transform 0.8s ease",
+          }}
+        >
+          <p
+            className={`font-lora leading-relaxed text-center ${
+              i === 0
+                ? "text-pink-300 text-xl font-bold italic tracking-wide mb-6"
+                : i >= paragraphs.length - 2
+                ? "text-pink-200 font-bold italic text-lg mt-8"
+                : "text-slate-200 text-base md:text-lg font-light leading-loose"
+            }`}
+          >
+            {para}
+          </p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export default function LoveLetterSection() {
+  const [speaking, setSpeaking] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const readLetter = () => {
     if (!("speechSynthesis" in window)) return;
@@ -161,32 +192,7 @@ export default function LoveLetterSection() {
                   </div>
 
                   {/* Letter paragraphs */}
-                  <div className="space-y-6">
-                    {LOVE_LETTER.paragraphs.map((para, i) => (
-                      <div
-                        key={i}
-                        ref={(el) => { lineRefs.current[i] = el; }}
-                        className="letter-line"
-                        style={{
-                          opacity: visibleLines.has(i) ? 1 : 0,
-                          transform: visibleLines.has(i) ? "translateY(0)" : "translateY(12px)",
-                          transition: "opacity 0.8s ease, transform 0.8s ease",
-                        }}
-                      >
-                        <p
-                          className={`font-lora leading-relaxed text-center ${
-                            i === 0
-                              ? "text-pink-300 text-xl font-bold italic tracking-wide mb-6"
-                              : i >= LOVE_LETTER.paragraphs.length - 2
-                              ? "text-pink-200 font-bold italic text-lg mt-8"
-                              : "text-slate-200 text-base md:text-lg font-light leading-loose"
-                          }`}
-                        >
-                          {para}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
+                  <LetterLines paragraphs={LOVE_LETTER.paragraphs} />
 
                   {/* Decorative seal bottom */}
                   <div className="flex items-center gap-4 mt-12">
