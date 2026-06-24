@@ -10,7 +10,7 @@ import Image from "next/image";
 
 // Constellation connections [from index, to index]
 const CONNECTIONS = [
-  [0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 0], [1, 5], [2, 4],
+  [0, 1], [1, 2], [2, 3], [3, 4], [4, 0], [1, 3], [1, 4],
 ];
 
 function MemoryModal({ memory, onClose }: { memory: Memory; onClose: () => void }) {
